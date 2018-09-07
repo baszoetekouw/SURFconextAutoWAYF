@@ -1,0 +1,17 @@
+{
+	"manifest_version": 2,
+	"name": "AutoWAYFconext",
+	"version": "0.1",
+	"description": "Adds a red border to all webpages matching mozilla.org.",
+	"icons": {
+		"48": "icons/where-48.png",
+		"96": "icons/where-96.png"
+	},
+	"content_scripts": [
+		{
+			"matches": ["https://engine.surfconext.nl/authentication/*"],
+			"js": ["wayfselect.js"]
+		}
+	]
+
+}
