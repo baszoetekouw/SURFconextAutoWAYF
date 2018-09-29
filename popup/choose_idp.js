@@ -5,16 +5,31 @@ function storeSettings(settings) {
 	browser.storage.local.set(settings);
 }
 
-function setDefault(idp)
+function showDefault(idp)
 {
 	console.log("Default is: "+idp);
-	document.querySelector("#default").innerText = idp;
+	if (idp==null) {
+		var idpName = "<disabled>";
+	} else {
+		var idpName = idp;
+	}
+	document.querySelector("#default").innerText = idpName;
 }
 
-function initDefault()
+function fetchDefault()
 {
 	browser.storage.local.get({idp:''})
-		.then(({idp}) => setDefault(idp));
+		.then(({idp}) => showDefault(idp));
+}
+
+function selectIdp(idp) {
+	console.log("CS: Selected IdP "+idp);
+	storeSettings({ idp: idp });
+}
+
+function resetIdp() {
+	console.log("CS: Selected reset");
+	storeSettings({ idp: null });
 }
 
 /**
@@ -24,23 +39,11 @@ function initDefault()
 function listenForClicks()
 {
 	document.addEventListener("click", (e) => {
-
-		function selected_idp(idp) {
-			console.log("CS: Selected IdP "+idp);
-			storeSettings({ idp: idp });
-			//notifyBackgroundPage({type: "select_idp", idp: idp});
-		}
-
-		function reset_idp() {
-			console.log("CS: Selected reset");
-			notifyBackgroundPage({type: "reset"});
-		}
-
 		if (e.target.classList.contains("idp")) {
-			selected_idp(e.target.innerText);
+			selectIdp(e.target.innerText);
 		}
 		else if (e.target.classList.contains("reset")) {
-			reset_idp();
+			resetIdp();
 		}
 	});
 }
@@ -54,11 +57,11 @@ function listenForDefaultChange()
 		{
 			idp = e.idp.newValue;
 			console.log("Default IdP changed to "+idp);
-			setDefault(idp);
+			showDefault(idp);
 		}
 	});
 }
 
-initDefault();
+fetchDefault();
 listenForClicks();
 listenForDefaultChange();
