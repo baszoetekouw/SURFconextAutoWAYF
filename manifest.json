@@ -14,8 +14,8 @@
 	"background": {
 		"scripts": ["background-script.js"]
 	},
-	"browser_style": true,
 	"browser_action": {
+		"browser_style": true,
 		"default_icon": "icons/where-64.png",
 		"default_title": "WAYF Be Gone",
 		"default_popup": "popup/choose_idp.html"

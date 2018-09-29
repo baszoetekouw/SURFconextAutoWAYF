@@ -36,7 +36,8 @@ function initDefault()
  * Listen for clicks on the buttons, and send the appropriate message to
  * the content script in the page.
  */
-function listenForClicks() {
+function listenForClicks()
+{
 	document.addEventListener("click", (e) => {
 
 		function selected_idp(idp) {
@@ -59,5 +60,20 @@ function listenForClicks() {
 	});
 }
 
+function listenForDefaultChange()
+{
+	browser.storage.onChanged.addListener( (e) => {
+		console.log("Storage changed");
+		console.log(e);
+		if ('idp' in e)
+		{
+			idp = e.idp.newValue;
+			console.log("Default IdP changed to "+idp);
+			setDefault(idp);
+		}
+	});
+}
+
 initDefault();
 listenForClicks();
+listenForDefaultChange();
