@@ -4,8 +4,20 @@
 	"version": "0.1",
 	"description": "Adds a red border to all webpages matching mozilla.org.",
 	"icons": {
-		"48": "icons/where-48.png",
+		"48": "icons/where-64.png",
 		"96": "icons/where-96.png"
+	},
+	"applications": {
+		"gecko": { "id": "8a4ca925-80b0-45d9-bf22-3debe56f42dc@uid.bla" }
+	},
+	"permissions": [ "storage" ],
+	"background": {
+		"scripts": ["background-script.js"]
+	},
+	"browser_action": {
+		"default_icon": "icons/where-64.png",
+		"default_title": "WAYF Be Gone",
+		"default_popup": "popup/choose_idp.html"
 	},
 	"content_scripts": [
 		{
