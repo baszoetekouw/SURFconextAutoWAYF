@@ -1,5 +1,9 @@
-html, body {
-	width: 100px;
+html {
+	font-size: small;
+}
+
+body {
+	margin: 1em;
 }
 
 .hidden {
@@ -7,10 +11,11 @@ html, body {
 }
 
 .button {
+	display: block;
+	width: 100%;
 	margin: 3% auto;
 	padding: 4px;
-	text-align: center;
-	font-size: 1.5em;
+	text-align: left;
 	cursor: pointer;
 }
 
@@ -23,9 +28,24 @@ html, body {
 }
 
 .reset {
+	margin-top: 1em;
 	background-color: #FBFBC9;
 }
 
 .reset:hover {
 	background-color: #EAEA9D;
+}
+
+.logo-wrapper {
+	width: 200px;
+	height: 75px;
+	vertical-align: middle;
+	margin-right: 1em;
+}
+.logo {
+	width: auto;
+	height: auto;
+	max-width: 200px;
+	max-height: 75px;
+	vertical-align: middle;
 }

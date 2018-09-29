@@ -1,4 +1,20 @@
 
+const metadata_source1 = "https://engine.surfconext.nl/authentication/proxy/idps-metadata";
+const metadata_source2 = "https://engine.surfconext.nl/authentication/proxy/idps-metadata?sp-entity-id=https://profile.surfconext.nl/authentication/metadata";
+
+function createIdpList(idps) {
+	html="";
+	for (i=0; i<idps.length; i++) {
+		console.log(idps[i]);
+		html += `<button type="button" class="button idp" value="${idps[i].entityid}" name="${idps[i].name}">`;
+		html += `<span class="logo-wrapper"><img class="logo" src="${idps[i].logo}"/></span>`;
+		html += `${idps[i].name}`;
+		html += `</button>\n`;
+	}
+	console.log("Setting html to "+html);
+	document.querySelector('#idps').innerHTML = html;
+}
+
 function storeSettings(settings) {
 	console.log("Storing settings");
 	console.log(settings);
@@ -7,11 +23,12 @@ function storeSettings(settings) {
 
 function showDefault(idp)
 {
-	console.log("Default is: "+idp);
+	console.log("Default is: ");
+	console.log(idp);
 	if (idp==null) {
 		var idpName = "<disabled>";
 	} else {
-		var idpName = idp;
+		var idpName = idp.name;
 	}
 	document.querySelector("#default").innerText = idpName;
 }
@@ -22,7 +39,8 @@ function fetchDefault()
 		.then(({idp}) => showDefault(idp));
 }
 
-function selectIdp(idp) {
+function selectIdp(idp_entityid,idp_name) {
+	idp = { name: idp_name, entityid: idp_entityid };
 	console.log("CS: Selected IdP "+idp);
 	storeSettings({ idp: idp });
 }
@@ -40,9 +58,9 @@ function listenForClicks()
 {
 	document.addEventListener("click", (e) => {
 		if (e.target.classList.contains("idp")) {
-			selectIdp(e.target.innerText);
+			selectIdp(e.target.value,e.target.name);
 		}
-		else if (e.target.classList.contains("reset")) {
+		else if (e.target.id=="reset_idp") {
 			resetIdp();
 		}
 	});
@@ -62,6 +80,15 @@ function listenForDefaultChange()
 	});
 }
 
+
+var idp_list = [
+	{ name: "SURFnet bv", entityid: "https://idp.surfnet.nl", logo: "https://static.surfconext.nl/logos/idp/surfnet.png" },
+	{ name: "Universitair Medisch Centrum Utrecht", entityid: "http://fs.umcutrecht.nl/adfs/services/trust", logo: "https://static.surfconext.nl/logos/idp/UMC-Utrecht_logo.png" },
+	{ name: "Hogeschool van Amsterdam", entityid: "http://adfs20.hva.nl/adfs/services/trust", logo: "https:///static.surfconext.nl/logos/idp/hva.jpg" },
+	//{ name: "", entityid: "", logo: "" },
+];
+
+createIdpList(idp_list);
 fetchDefault();
 listenForClicks();
 listenForDefaultChange();
