@@ -11,9 +11,6 @@
 		"gecko": { "id": "8a4ca925-80b0-45d9-bf22-3debe56f42dc@uid.bla" }
 	},
 	"permissions": [ "storage" ],
-	"background": {
-		"scripts": ["background-script.js"]
-	},
 	"browser_action": {
 		"browser_style": true,
 		"default_icon": "icons/where-64.png",
@@ -23,7 +20,7 @@
 	"content_scripts": [
 		{
 			"matches": ["https://engine.surfconext.nl/authentication/*"],
-			"js": ["wayfselect.js"]
+			"js": ["contentscript-wayf.js"]
 		}
 	]
 
