@@ -1,3 +1,4 @@
+
 function handleError(error) {
 	console.log("CS: handleError: ");
 	console.log(error);
@@ -15,6 +16,22 @@ function notifyBackgroundPage(msg) {
 	sending.then(handleResponse, handleError);
 }
 
+function storeSettings(idp) {
+	browser.storage.local.set({ idp: idp });
+}
+
+function setDefault(idp)
+{
+	console.log("Default is: "+idp);
+	document.querySelector("#default").innerText = idp;
+}
+
+function initDefault()
+{
+	browser.storage.local.get({idp:''})
+		.then(({idp}) => setDefault(idp));
+}
+
 /**
  * Listen for clicks on the buttons, and send the appropriate message to
  * the content script in the page.
@@ -24,6 +41,7 @@ function listenForClicks() {
 
 		function selected_idp(idp) {
 			console.log("CS: Selected IdP "+idp);
+			storeSettings({ idp: idp });
 			notifyBackgroundPage({type: "select_idp", idp: idp});
 		}
 
@@ -41,4 +59,5 @@ function listenForClicks() {
 	});
 }
 
+initDefault();
 listenForClicks();
