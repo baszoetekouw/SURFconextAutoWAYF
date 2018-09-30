@@ -8,7 +8,10 @@
 		"96": "icons/where-96.png"
 	},
 	"applications": {
-		"gecko": { "id": "8a4ca925-80b0-45d9-bf22-3debe56f42dc@uid.bla" }
+		"gecko": {
+			"id": "{d65c3e94-7678-4e2e-84e9-18765d2adc6d}",
+			"strict_min_version": "52"
+		}
 	},
 	"permissions": [ "storage" ],
 	"browser_action": {
