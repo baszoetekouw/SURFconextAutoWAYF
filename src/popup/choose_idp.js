@@ -34,18 +34,19 @@ function showDefault(idp)
 {
 	console.log("Default is: ");
 	console.log(idp);
-	if (idp==null) {
-		var idpName = "<disabled>";
-	} else {
+	if (idp!==undefined && ('name' in idp)) {
+		console.log("setting idp to '"+idp.name+"'");
 		var idpName = idp.name;
+	} else {
+		console.log("setting idp to disabled");
+		var idpName = "<disabled>";
 	}
 	document.querySelector("#default").innerText = idpName;
 }
 
 function fetchDefault()
 {
-	browser.storage.local.get({idp:''})
-		.then(({idp}) => showDefault(idp));
+	browser.storage.local.get(['idp'], function(result) { showDefault(result.idp); });
 }
 
 function selectIdp(idp_entityid,idp_name) {

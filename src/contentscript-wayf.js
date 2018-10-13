@@ -28,8 +28,7 @@ function WAYFBeGone(idp) {
 
 function fetchIdP() {
 	console.log("Fetching Idp");
-	browser.storage.local.get({idp:''})
-		.then(({idp}) => WAYFBeGone(idp.entityid));
+	browser.storage.local.get(['idp'], function(result) { WAYFBeGone(result.idp.entityid) } );
 }
 
 if (document.readyState === "loading") {
