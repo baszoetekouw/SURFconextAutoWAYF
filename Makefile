@@ -6,7 +6,10 @@ all: wayfBeGone.xpi
 
 .PHONY: clean
 clean:
-	-rm -f wayfBeGone.xpi
+	-rm -f wayfBeGone.xpi wayfBeGone.zip
 
-wayfBeGone.xpi: $(SRC)
+wayfBeGone.zip: $(SRC)
 	cd src && zip -r ../$@ *
+
+wayfBeGone.xpi: wayfBeGone.zip
+	ln -s $^ $@
