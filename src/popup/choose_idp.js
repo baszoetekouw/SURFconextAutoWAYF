@@ -34,7 +34,7 @@ function showDefault(idp)
 {
 	console.log("Default is: ");
 	console.log(idp);
-	if (idp!==undefined && ('name' in idp)) {
+	if (idp!==null && ('name' in idp)) {
 		console.log("setting idp to '"+idp.name+"'");
 		var idpName = idp.name;
 	} else {
