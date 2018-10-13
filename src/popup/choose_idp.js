@@ -1,3 +1,12 @@
+/* compatibility with all browsers
+ * see https://www.smashingmagazine.com/2017/04/browser-extension-edge-chrome-firefox-opera-brave-vivaldi/
+ */
+window.browser = (function () {
+	return window.msBrowser ||
+		window.browser ||
+		window.chrome;
+})();
+
 
 const metadata_source1 = "https://engine.surfconext.nl/authentication/proxy/idps-metadata";
 const metadata_source2 = "https://engine.surfconext.nl/authentication/proxy/idps-metadata?sp-entity-id=https://profile.surfconext.nl/authentication/metadata";

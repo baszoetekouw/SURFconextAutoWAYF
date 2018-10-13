@@ -1,3 +1,13 @@
+/* compatibility with all browsers
+ * see https://www.smashingmagazine.com/2017/04/browser-extension-edge-chrome-firefox-opera-brave-vivaldi/
+ */
+window.browser = (function () {
+	return window.msBrowser ||
+		window.browser ||
+		window.chrome;
+})();
+
+
 function WAYFBeGone(idp) {
 	console.log("WAYF Be Gone!");
 	console.log("IdP is");
