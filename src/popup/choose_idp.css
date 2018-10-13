@@ -41,6 +41,7 @@ body {
 	height: 75px;
 	vertical-align: middle;
 	margin-right: 1em;
+	pointer-events: none; /* pass pointer event to parent */
 }
 .logo {
 	width: auto;
@@ -48,4 +49,5 @@ body {
 	max-width: 200px;
 	max-height: 75px;
 	vertical-align: middle;
+	pointer-events: none; /* pass pointer event to parent */
 }
