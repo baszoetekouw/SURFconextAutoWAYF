@@ -8,12 +8,12 @@ window.browser = (function () {
 })();
 
 
-function WAYFBeGone(idp) {
+function WAYFBeGone(idpEntityid) {
 	console.log("WAYF Be Gone!");
 	console.log("IdP is");
-	console.log(idp);
-	if (idp && idp!=null) {
-		console.log("Selecting IdP "+idp+" in WAYF");
+	console.log(idpEntityid);
+	if (idpEntityid && idpEntityid!==null) {
+		console.log("Selecting IdP "+idpEntityid+" in WAYF");
 		/* the first (and only) form in the page is used to select the IdP
 		 * The entityid of the IdP is entered in the element
 		 *   <input type="hidden" id="form-idp" name="idp" value=""/>
@@ -21,7 +21,7 @@ function WAYFBeGone(idp) {
 		 */
 		idp_form = document.forms[0];
 		//idp_form.elements[1].value = idp;
-		idp_form.idp.value = idp;
+		idp_form.idp.value = idpEntityid;
 		idp_form.submit();
 	}
 }
