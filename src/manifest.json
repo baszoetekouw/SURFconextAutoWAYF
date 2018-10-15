@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "wayfBeGone",
 	"version": "0.2",
-	"description": "This is an experimental plugin for use with SURFconext, the identity federation of Dutch higher education.  The plugin allows you to preselect your university or school, and will then automatically select that institution whenever you need to choose it from the lost in the discovery screen at https://engine.surfconext.nl",
+	"description": "This is an experimental plugin for use with SURFconext, the identity federation of Dutch higher education.  The plugin allows you to preselect your university or school, and will then automatically select that institution whenever you need to choose it from the discovery screen at https://engine.surfconext.nl",
 	"icons": {
 		"64": "icons/where-64.png",
 		"96": "icons/where-96.png"
