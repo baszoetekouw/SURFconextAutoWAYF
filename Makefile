@@ -12,4 +12,4 @@ wayfBeGone.zip: $(SRC)
 	cd src && zip -r ../$@ *
 
 wayfBeGone.xpi: wayfBeGone.zip
-	ln -s $^ $@
+	ln -fs $^ $@
