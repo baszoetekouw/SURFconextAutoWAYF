@@ -1,3 +1,5 @@
+"use strict";
+
 /* compatibility with all browsers
  * see https://www.smashingmagazine.com/2017/04/browser-extension-edge-chrome-firefox-opera-brave-vivaldi/
  */
@@ -7,19 +9,28 @@ window.browser = (function () {
 		window.chrome;
 })();
 
+/* debug function
+ * just debug prefixed with name of the script
+ */
+window.debug = function () {
+    var args = ["background.js"];
+    for (var i=0; i<arguments.length; i++) { args.push(arguments[i]); }
+    console.log.apply(console, args);
+};
+
 
 function WAYFBeGone(idpEntityid) {
-	console.log("WAYF Be Gone!");
-	console.log("IdP is");
-	console.log(idpEntityid);
+	debug("WAYF Be Gone!");
+	debug("IdP is");
+	debug(idpEntityid);
 	if (idpEntityid && idpEntityid!==null) {
-		console.log("Selecting IdP "+idpEntityid+" in WAYF");
+		debug("Selecting IdP "+idpEntityid+" in WAYF");
 		/* the first (and only) form in the page is used to select the IdP
 		 * The entityid of the IdP is entered in the element
 		 *   <input type="hidden" id="form-idp" name="idp" value=""/>
 		 * after which the form is submitted
 		 */
-		idp_form = document.forms[0];
+		var idp_form = document.forms[0];
 		//idp_form.elements[1].value = idp;
 		idp_form.idp.value = idpEntityid;
 		idp_form.submit();
@@ -27,12 +38,12 @@ function WAYFBeGone(idpEntityid) {
 }
 
 function fetchIdP() {
-	console.log("Fetching Idp");
+	debug("Fetching Idp");
 	browser.storage.local.get(['idp'], function(result) { WAYFBeGone(result.idp.entityid) } );
 }
 
 if (document.readyState === "loading") {
-	console.log("Still loading");
+	debug("Still loading");
 	document.addEventListener("DOMContentLoaded",fetchIdP);
 } else {  // `DOMContentLoaded` already fired
 	fetchIdP();

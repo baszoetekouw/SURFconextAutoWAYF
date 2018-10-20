@@ -7,6 +7,12 @@ window.browser = (function () {
 		window.chrome;
 })();
 
+window.debug = function () {
+	var args = ["choose_idp:"];
+	for(var i=0; i<arguments.length; i++) { args.push(arguments[i]); }
+	console.log.apply(console, args);
+};
+
 
 const metadata_source1 = "https://engine.surfconext.nl/authentication/proxy/idps-metadata";
 const metadata_source2 = "https://engine.surfconext.nl/authentication/proxy/idps-metadata?sp-entity-id=https://profile.surfconext.nl/authentication/metadata";
@@ -14,31 +20,31 @@ const metadata_source2 = "https://engine.surfconext.nl/authentication/proxy/idps
 function createIdpList(idps) {
 	html="";
 	for (i=0; i<idps.length; i++) {
-		console.log(idps[i]);
+		debug(idps[i]);
 		html += `<button type="button" class="button idp" value="${idps[i].entityid}" name="${idps[i].name}">`;
 		html += `<span class="logo-wrapper"><img class="logo" src="${idps[i].logo}"/></span>`;
 		html += `${idps[i].name}`;
 		html += `</button>\n`;
 	}
-	console.log("Setting html to "+html);
+	debug("Setting html to "+html);
 	document.querySelector('#idps').innerHTML = html;
 }
 
 function storeSettings(settings) {
-	console.log("Storing settings");
-	console.log(settings);
+	debug("Storing settings");
+	debug(settings);
 	browser.storage.local.set(settings);
 }
 
 function showDefault(idp)
 {
-	console.log("Default is: ");
-	console.log(idp);
-	if (idp!==null && ('name' in idp)) {
-		console.log("setting idp to '"+idp.name+"'");
+	debug("Default is: ");
+	debug(idp);
+	if (idp && ('name' in idp)) {
+		debug("setting idp to '"+idp.name+"'");
 		var idpName = idp.name;
 	} else {
-		console.log("setting idp to disabled");
+		debug("setting idp to disabled");
 		var idpName = "<disabled>";
 	}
 	document.querySelector("#default").innerText = idpName;
@@ -51,12 +57,12 @@ function fetchDefault()
 
 function selectIdp(idp_entityid,idp_name) {
 	idp = { name: idp_name, entityid: idp_entityid };
-	console.log("CS: Selected IdP "+idp);
+	debug("CS: Selected IdP "+idp);
 	storeSettings({ idp: idp });
 }
 
 function resetIdp() {
-	console.log("CS: Selected reset");
+	debug("CS: Selected reset");
 	storeSettings({ idp: null });
 }
 
@@ -79,12 +85,12 @@ function listenForClicks()
 function listenForDefaultChange()
 {
 	browser.storage.onChanged.addListener( (e) => {
-		console.log("Storage changed");
-		console.log(e);
+		debug("Storage changed");
+		debug(e);
 		if ('idp' in e)
 		{
 			idp = e.idp.newValue;
-			console.log("Default IdP changed to "+idp);
+			debug("Default IdP changed to "+idp);
 			showDefault(idp);
 		}
 	});
