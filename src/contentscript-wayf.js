@@ -13,9 +13,9 @@ window.browser = (function () {
  * just debug prefixed with name of the script
  */
 window.debug = function () {
-    var args = ["background.js"];
-    for (var i=0; i<arguments.length; i++) { args.push(arguments[i]); }
-    console.log.apply(console, args);
+	var args = ["background.js"];
+	for (var i=0; i<arguments.length; i++) { args.push(arguments[i]); }
+	console.log.apply(console, args);
 };
 
 var port = browser.runtime.connect({name:"port-from-contentscript"});
