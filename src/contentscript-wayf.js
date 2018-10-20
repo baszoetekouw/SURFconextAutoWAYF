@@ -18,6 +18,14 @@ window.debug = function () {
     console.log.apply(console, args);
 };
 
+var port = browser.runtime.connect({name:"port-from-contentscript"});
+port.onMessage.addListener(handleIncomingMessage);
+port.postMessage({greeting: "hello from content script script"});
+
+function handleIncomingMessage(msg) {
+	debug("Received message",msg);
+}
+
 
 function WAYFBeGone(idpEntityid) {
 	debug("WAYF Be Gone!");

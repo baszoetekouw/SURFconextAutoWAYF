@@ -20,6 +20,9 @@
 		"default_title": "WAYF Be Gone",
 		"default_popup": "popup/choose_idp.html"
 	},
+	"background": {
+		"scripts": [ "background.js" ]
+	},
 	"content_scripts": [
 		{
 			"matches": [

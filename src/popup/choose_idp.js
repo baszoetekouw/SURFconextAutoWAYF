@@ -1,3 +1,4 @@
+
 /* compatibility with all browsers
  * see https://www.smashingmagazine.com/2017/04/browser-extension-edge-chrome-firefox-opera-brave-vivaldi/
  */
@@ -13,6 +14,13 @@ window.debug = function () {
 	console.log.apply(console, args);
 };
 
+var port = browser.runtime.connect({name:"port-from-popup"});
+port.onMessage.addListener(handleIncomingMessage);
+port.postMessage({greeting: "hello from popup script"});
+
+function handleIncomingMessage(msg) {
+    debug("Received message",msg);
+}
 
 const metadata_source1 = "https://engine.surfconext.nl/authentication/proxy/idps-metadata";
 const metadata_source2 = "https://engine.surfconext.nl/authentication/proxy/idps-metadata?sp-entity-id=https://profile.surfconext.nl/authentication/metadata";
