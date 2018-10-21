@@ -59,17 +59,15 @@ function handleDisconnect(port) {
  *     no arguments
  *   type=getidp     request the currently preferred IdP
  *     no arguments
- *   type=returnidp  returns the currently preferred IdP, as requested by getidp
+ *   type=defaultidp send the current idp
  *     argument idp={entityid,name,logo_uri}
  *   type=setidp     set a new preferred IdP
- *     argument idp={entityid,name,logo_uri}
- *   type=idpset     sent when a new preferred IdP is set
  *     argument idp={entityid,name,logo_uri}
  *   type=resetidp   unset the preferred IdP (aka disable plugin)
  */
 function handleIncomingMessage(port,msg) {
 	debug("Received message",msg,"from port",port);
-	if (!('type' in msg)) {
+	if (!('type' in msg) || (typeof msg.type!=='string')) {
 		debug("Message has no type");
 		return;
 	}
@@ -94,7 +92,7 @@ function handleIncomingMessage(port,msg) {
 			setIdP(msg.idp)
 			break;
 		case 'resetidp': /* reset selected idp */
-			setIdp(undefined);
+			resetIdP();
 			break;
 		default: /* error */
 			error("unknown message type ",msg.type);
@@ -119,14 +117,38 @@ function sendIdPs(port) {
 
 /* send the currently selected IdP to the specified port */
 function sendCurrentIdP(port) {
-	debug("sendCurrentIdP to",port);
+	browser.storage.local.get(['idp'], function(result) {
+		var idp = result.idp;
+		debug("sending default idp",idp,"to port",port);
+		port.postMessage({type: "defaultidp", idp: idp})
+	});
 	return;
 }
 
-/* send the currently selected IdP to the specified port */
+/* set the default IdP */
 function setIdP(idp) {
 	debug("setIdP",idp);
+	browser.storage.local.set({idp: idp});
+}
+
+/* unset the default IdP */
+function resetIdP() {
+	debug("resetIdP");
+	browser.storage.local.remove(['idp']);
 	return;
+}
+
+function listenForDefaultChange()
+{
+	browser.storage.onChanged.addListener( (e) => {
+		debug("Storage changed",e);
+		if ('idp' in e)
+		{
+			var idp = e.idp.newValue;
+			debug("Default IdP changed: ",idp);
+			broadcastMessage({type: "defaultidp", idp: idp});
+		}
+	});
 }
 
 /* send regular pings to all connected scripts */
@@ -134,3 +156,5 @@ setInterval(
 	function() { broadcastMessage({type: "PING"}) },
 	2000
 );
+
+listenForDefaultChange();

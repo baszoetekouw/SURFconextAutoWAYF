@@ -20,6 +20,21 @@ port.postMessage({type: "HELO", msg: "Hello from the popup script"});
 
 function handleIncomingMessage(msg) {
     debug("Received message",msg);
+	if (!('type' in msg) || (typeof msg.type!=='string')) {
+		debug("Invalid message");
+		return;
+	}
+	switch (msg.type.toLowerCase()) {
+		case 'defaultidp':
+			showDefault(msg.idp);
+			break;
+		case 'ping': /* NOP */
+		case 'pong': /* NOP */
+			break;
+		default:
+			debug("Unhandled message type");
+			break;
+	}
 }
 
 const metadata_source1 = "https://engine.surfconext.nl/authentication/proxy/idps-metadata";
@@ -38,16 +53,9 @@ function createIdpList(idps) {
 	document.querySelector('#idps').innerHTML = html;
 }
 
-function storeSettings(settings) {
-	debug("Storing settings");
-	debug(settings);
-	browser.storage.local.set(settings);
-}
-
 function showDefault(idp)
 {
-	debug("Default is: ");
-	debug(idp);
+	debug("Default is: ",idp);
 	if (idp && ('name' in idp)) {
 		debug("setting idp to '"+idp.name+"'");
 		var idpName = idp.name;
@@ -60,18 +68,19 @@ function showDefault(idp)
 
 function fetchDefault()
 {
-	browser.storage.local.get(['idp'], function(result) { showDefault(result.idp); });
+	/* will result in response with defualt idp; response is handled in handleIncomingMessage() */
+	port.postMessage({type: 'getidp'});
 }
 
 function selectIdp(idp_entityid,idp_name) {
-	idp = { name: idp_name, entityid: idp_entityid };
-	debug("CS: Selected IdP "+idp);
-	storeSettings({ idp: idp });
+	idp = { name: idp_name, entityid: idp_entityid, logo_uri: null};
+	debug("Selected IdP ",idp);
+	port.postMessage({type: "setidp", idp: idp});
 }
 
 function resetIdp() {
-	debug("CS: Selected reset");
-	storeSettings({ idp: null });
+	debug("Selected reset");
+	port.postMessage({type: "resetidp"});
 }
 
 /**
@@ -90,21 +99,6 @@ function listenForClicks()
 	});
 }
 
-function listenForDefaultChange()
-{
-	browser.storage.onChanged.addListener( (e) => {
-		debug("Storage changed");
-		debug(e);
-		if ('idp' in e)
-		{
-			idp = e.idp.newValue;
-			debug("Default IdP changed to "+idp);
-			showDefault(idp);
-		}
-	});
-}
-
-
 var idp_list = [
 	{ name: "SURFnet bv", entityid: "https://idp.surfnet.nl", logo: "https://static.surfconext.nl/logos/idp/surfnet.png" },
 	{ name: "Universitair Medisch Centrum Utrecht", entityid: "http://fs.umcutrecht.nl/adfs/services/trust", logo: "https://static.surfconext.nl/logos/idp/UMC-Utrecht_logo.png" },
@@ -115,4 +109,3 @@ var idp_list = [
 createIdpList(idp_list);
 fetchDefault();
 listenForClicks();
-listenForDefaultChange();
