@@ -37,7 +37,7 @@ browser.runtime.onConnect.addListener(function (port) {
 	port.uuid = uuid();
 	ports[port.uuid] = port
 	debug("Received connect from ", port, "Total clients: ", Object.keys(ports).length);
-	port.onMessage.addListener(handleIncomingMessage);
+	port.onMessage.addListener(function (msg) { handleIncomingMessage(port,msg) });
 	port.onDisconnect.addListener(handleDisconnect);
 });
 
@@ -63,8 +63,8 @@ function handleDisconnect(port) {
  *     argument idp={entityid,name,logo_uri}
  *   type=resetidp   unset the preferred IdP (aka disable plugin)
  */
-function handleIncomingMessage(msg) {
-	debug("Received message",msg);
+function handleIncomingMessage(port,msg) {
+	debug("Received message",msg,"from port",port);
 }
 
 /* send a message to all connected "clients" */
