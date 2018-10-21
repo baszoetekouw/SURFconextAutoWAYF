@@ -48,7 +48,21 @@ function handleDisconnect(port) {
 	delete ports[port.uuid];
 }
 
-/* handle incoming messages */
+/* handle incoming messages
+ * messages are defined by their "type"-field.
+ *   type=ping       ping from script, no action required
+ *   type=helo       initial hello on connect
+ *     msg           message to display in console
+ *   type=listidps   request a list of all known IdPs
+ *     no arguments
+ *   type=getidp     request the currently preferred IdP
+ *     no arguments
+ *   type=returnidp  returns the currently preferred IdP, as requested by getidp
+ *     argument idp={entityid,name,logo_uri}
+ *   type=setidp     set a new preferred IdP
+ *     argument idp={entityid,name,logo_uri}
+ *   type=resetidp   unset the preferred IdP (aka disable plugin)
+ */
 function handleIncomingMessage(msg) {
 	debug("Received message",msg);
 }
@@ -64,6 +78,6 @@ function broadcastMessage(msg) {
 
 /* send regular pings to all connected scripts */
 setInterval(
-	function() { broadcastMessage({greeting: "hello from background script"}) },
+	function() { broadcastMessage({type: "PING"}) },
 	2000
 );

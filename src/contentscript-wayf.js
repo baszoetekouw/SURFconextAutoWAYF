@@ -20,7 +20,7 @@ window.debug = function () {
 
 var port = browser.runtime.connect({name:"port-from-contentscript"});
 port.onMessage.addListener(handleIncomingMessage);
-port.postMessage({greeting: "hello from content script script"});
+port.postMessage({type: "HELO", msg: "Hello from the content script"});
 
 function handleIncomingMessage(msg) {
 	debug("Received message",msg);

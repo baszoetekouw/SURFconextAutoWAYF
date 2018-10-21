@@ -16,7 +16,7 @@ window.debug = function () {
 
 var port = browser.runtime.connect({name:"port-from-popup"});
 port.onMessage.addListener(handleIncomingMessage);
-port.postMessage({greeting: "hello from popup script"});
+port.postMessage({type: "HELO", msg: "Hello from the popup script"});
 
 function handleIncomingMessage(msg) {
     debug("Received message",msg);
