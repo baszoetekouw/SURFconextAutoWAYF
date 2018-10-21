@@ -51,9 +51,10 @@ function handleDisconnect(port) {
 
 /* handle incoming messages
  * messages are defined by their "type"-field.
- *   type=ping       ping from script, no action required
  *   type=helo       initial hello on connect
  *     msg           message to display in console
+ *   type=ping       ping from script, background script will reply with pong
+ *   type=pong       pong from background script, no action required
  *   type=listidps   request a list of all known IdPs
  *     no arguments
  *   type=getidp     request the currently preferred IdP
@@ -62,10 +63,43 @@ function handleDisconnect(port) {
  *     argument idp={entityid,name,logo_uri}
  *   type=setidp     set a new preferred IdP
  *     argument idp={entityid,name,logo_uri}
+ *   type=idpset     sent when a new preferred IdP is set
+ *     argument idp={entityid,name,logo_uri}
  *   type=resetidp   unset the preferred IdP (aka disable plugin)
  */
 function handleIncomingMessage(port,msg) {
 	debug("Received message",msg,"from port",port);
+	if (!('type' in msg)) {
+		debug("Message has no type");
+		return;
+	}
+	switch (msg.type.toLowerCase()) {
+		case 'ping': /* reply with pong */
+			port.postMessage({type: 'pong'});
+			break;
+		case 'helo': /* NOP */
+		case 'pong': /* NOP */
+			break;
+		case 'listidps': /* retun list of idps */
+			sendIdPs(port);
+			break;
+		case 'getidp': /* return currently selected idp */
+			sendCurrentIdP(port);
+			break;
+		case 'setidp': /* set selected idp */
+			if (!('idp' in msg)) {
+				error("No idp in setidp message");
+				break;
+			}
+			setIdP(msg.idp)
+			break;
+		case 'resetidp': /* reset selected idp */
+			setIdp(undefined);
+			break;
+		default: /* error */
+			error("unknown message type ",msg.type);
+			return;
+	}
 }
 
 /* send a message to all connected "clients" */
@@ -75,6 +109,24 @@ function broadcastMessage(msg) {
 		debug("Broadcasting to ",id);
 		p.postMessage(msg);
 	}
+}
+
+/* send a list of all IdPs to the specified port */
+function sendIdPs(port) {
+	debug("sendIdPs to",port);
+	return;
+}
+
+/* send the currently selected IdP to the specified port */
+function sendCurrentIdP(port) {
+	debug("sendCurrentIdP to",port);
+	return;
+}
+
+/* send the currently selected IdP to the specified port */
+function setIdP(idp) {
+	debug("setIdP",idp);
+	return;
 }
 
 /* send regular pings to all connected scripts */
