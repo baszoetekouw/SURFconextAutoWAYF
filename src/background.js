@@ -10,11 +10,12 @@ window.browser = (function () {
 /* debug function
  * just console.log prefixed with name of the script
  */
-window.debug = function () {
+window.error = function () {
 	var args = ["background.js"];
 	for (var i=0; i<arguments.length; i++) { args.push(arguments[i]); }
 	console.log.apply(console, args);
 };
+window.debug = window.error;
 
 
 debug("background-script: LOAD");
